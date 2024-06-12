@@ -2,12 +2,14 @@ import json
 import pandas as pd
 import requests
 
-def get_viewer_tracking_info():
+def get_viewer_tracking_info(url):
 	"""collect the viewer tracking information from EASL analytics
+	
+	This is the instance in the series that is being viewed at a specific time.
 	"""
 	
 	# Send a GET request to the API endpoint
-	response = requests.get('http://amc-tensor1.ucdenver.pvt/eyetracking')
+	response = requests.get(url)
 
 	# Parse the response as JSON
 	data = response.json()
