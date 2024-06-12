@@ -30,8 +30,7 @@ def format_data(data, screen_size: float, screen_res: tuple, viewing_dist: int):
 	return data
 
 
-def classify(data, eye: str):
-	
+def classify(data, eye: str, roi_x: list=None):	
 	
 	# Time needs to be formatted for the cateyes algorithm
 	timestamp = data['timestamp_hardware'].values
@@ -51,13 +50,22 @@ def classify(data, eye: str):
 		time=sfreq_to_times(data['{}_x_deg'.format(eye)].values, sfreq=250, start_time=timestamp[0])
 	)
 	
-	return pd.DataFrame({
+	clf_res = pd.DataFrame({
 		'timestamp_hardware': timestamp,
 		'timestamp_in_seconds': timestamp_in_seconds,
 		# 'timestamp_in_seconds': sfreq_to_times(data['{}_x_deg'.format(eye)].values, sfreq=250, start_time=timestamp[0]),
 		'segment_id': segment_id,
-		'segment_class': segment_class
+		'segment_class': segment_class,
+		'{}_x'.format(eye): data['{}_x'.format(eye)].values,
+		'{}_y'.format(eye): data['{}_y'.format(eye)].values
 	})
+	
+	if roi_x is not None:
+		clf_res['in_roi_filter_x'] = data['{}_x'.format(eye)].apply(
+			lambda value: min(roi_x) <= float(value) <= max(roi_x)
+		)
+	
+	return clf_res
 	
 	
 
