@@ -34,8 +34,6 @@ def extract_url(url):
 
 def get_pixel_array(url, instance_map):
 	payload = extract_url(url)
-	
-	
 	orthanc_inst_id = instance_map.loc[instance_map.id == extract_url(url)['instance']].instance.values[0]
 	response = requests.get("http://amc-tensor1.ucdenver.pvt:8042/instances/{}/file".format(orthanc_inst_id))
 	dicom_file = DicomBytesIO(response.content)
