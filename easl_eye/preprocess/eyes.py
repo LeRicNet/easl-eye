@@ -55,15 +55,19 @@ def classify(data, eye: str, roi_x: list=None):
 	
 	data['segment_id'] = segment_id
 	data['segment_class'] = segment_class
-	data['{}_x'.format(eye)] = data['{}_x'.format(eye)].values
-	data['{}_y'.format(eye)] = data['{}_x'.format(eye)].values
+	data['{}_x'.format(eye)] = data['{}_x'.format(eye)].apply(float).values
+	data['{}_y'.format(eye)] = data['{}_x'.format(eye)].apply(float).values
 	
 	if roi_x is not None:
 		data['in_roi_filter_x'] = data['{}_x'.format(eye)].apply(
 			lambda value: min(roi_x) <= float(value) <= max(roi_x)
-	)
+		)
+		data['{}_roi_filter_scaled_x'.format(eye)] = data['{}_x'.format(eye)].apply(
+			lambda x: scale_gaze_data(x, _min=min(roi_x), _max=max(roi_x))
+		)
 		
 	return data
 	
 	
-
+def scale_gaze_data(x, _min, _max, dim_size=900):
+    return ((float(x) - _min) / (_max - _min)) * dim_size
