@@ -43,7 +43,7 @@ A simple example of _region growing_ can be derived using the `cv2.findContours`
 ### Algorithm to Expand Bounding Box use Sobel Edge Detection
 
 <p align="center">
-  <img src="./img/easl-eye/docs/img/sobel-bounding-box-and-expansion-algorithms.png" alt="Your image description" width="900"/>
+  <img src="./img/sobel-bounding-box-and-expansion-algorithms.png" alt="Your image description" width="900"/>
   <br>
   <i>Figure 3. Gaze-based bounding box overlayed on image processed by Sobel edge detection algorithm.</i>
 </p>
