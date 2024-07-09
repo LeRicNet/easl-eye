@@ -34,7 +34,7 @@ def format_data(data, screen_size: float, screen_res: tuple, viewing_dist: int):
 	return data
 
 
-def classify(data, eye: str, roi_x: list=None):	
+def classify(data, eye: str, roi_x: list=None, roi_y: list=None):	
 	
 	# Time needs to be formatted for the cateyes algorithm
 	timestamp = data['timestamp_hardware'].values
@@ -64,6 +64,14 @@ def classify(data, eye: str, roi_x: list=None):
 		)
 		data['{}_roi_filter_scaled_x'.format(eye)] = data['{}_x'.format(eye)].apply(
 			lambda x: scale_gaze_data(x, _min=min(roi_x), _max=max(roi_x))
+		)
+		
+	if roi_y is not None:
+		data['in_roi_filter_y'] = data['{}_y'.format(eye)].apply(
+			lambda value: min(roi_y) <= float(value) <= max(roi_y)
+		)
+		data['{}_roi_filter_scaled_y'.format(eye)] = data['{}_y'.format(eye)].apply(
+			lambda y: scale_gaze_data(y, _min=min(roi_y), _max=max(roi_y))
 		)
 		
 	return data
