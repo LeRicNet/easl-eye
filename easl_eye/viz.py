@@ -71,16 +71,27 @@ def session_animation(aligned_data, instance_map, dims: tuple=(900, 900), return
 	ax.axis('off')
 
 	# Set the figure background color to be transparent
-	fig.patch.set_alpha(0.0)
+	# fig.patch.set_alpha(0.0)
 
 	for i, image in enumerate(images):
-		image = cv2.resize(image, dims)
-		image = plt.imshow(image, cmap=plt.cm.bone, animated=True)
-		# if aligned_data.in_roi_filter_x[i]:
-		overlay = plt.scatter(aligned_data.right_roi_filter_scaled_x[i], aligned_data.right_roi_filter_scaled_y[i], color='red')
-		# frames.append([image, overlay])
-		# else:
-		frames.append([image])
+		img = cv2.resize(image, dims)
+		image = plt.imshow(img, cmap=plt.cm.bone, animated=True)
+		if aligned_data.in_roi_filter_x[i] and aligned_data.in_roi_filter_y[i]:
+			if aligned_data.segment_class[i] == 'Fixation':
+				color = 'green'
+				overlay = plt.scatter(aligned_data.right_roi_filter_scaled_x[i], aligned_data.right_roi_filter_scaled_y[i], color=color)
+				frames.append([image, overlay])
+				# center_point = (
+				# 	int(aligned_data.right_roi_filter_scaled_x[i]), 
+				# 	int(aligned_data.right_roi_filter_scaled_y[i])
+				# )
+				# # print('Center Point: {}'.format(center_point))
+				# bounding_box = eye.basic_expand(img, center_point, buffer=1)
+				# frames.append([image, show_box(bounding_box, ax=ax)])
+		else:
+			color = 'red'
+			overlay = plt.scatter(aligned_data.right_roi_filter_scaled_x[i], aligned_data.right_roi_filter_scaled_y[i], color=color)
+			frames.append([image, overlay])
 
 	print('frames compiled')
 
@@ -105,5 +116,6 @@ def show_mask(mask, ax, random_color=False):
 def show_box(box, ax):
     x0, y0 = box[0], box[1]
     w, h = box[2] - box[0], box[3] - box[1]
-    ax.add_patch(plt.Rectangle((x0, y0), w, h, edgecolor='blue', facecolor=(0,0,0,0), lw=2))
+    # ax.add_patch(plt.Rectangle((x0, y0), w, h, edgecolor='green', facecolor=(0,0,0,0), lw=2))
+    plt.Rectangle((x0, y0), w, h, edgecolor='green', facecolor=(0,0,0,0), lw=2)
 
