@@ -31,21 +31,19 @@ def _expand_x(arr_resized, center_point, direction, buffer):
     center_point = center_point[0]
     
     if direction == 'positive':
-        max_value = 900
         for i in range(arr_resized.shape[1] - center_point):
             max_value = arr_resized[center_point, center_point + i]
             if max_value > 0:
                 max_value = center_point + i + buffer
                 break
-        return max_value
+        return min(max_value, 900)
     elif direction == 'negative':
-        min_value = 0
         for i in range(center_point):
             min_value = arr_resized[center_point, center_point - i]
             if min_value > 0:
                 min_value = center_point - i - buffer
                 break
-        return min_value
+        return max(min_value, 0)
 
 def _expand_y(arr_resized, center_point, direction, buffer):
     """
@@ -64,21 +62,19 @@ def _expand_y(arr_resized, center_point, direction, buffer):
     center_point = center_point[1]
     
     if direction == 'positive':
-        max_value = 900
         for j in range(arr_resized.shape[0] - center_point):
             _value = arr_resized[center_point + j,center_point]
             if _value > 0:
                 max_value = center_point + j + buffer
                 break
-        return max_value
+        return min(max_value, 900)
     elif direction == 'negative':
-        min_value = 0
         for j in range(center_point):
             _value = arr_resized[center_point - j,center_point]
             if _value > 0:
                 min_value = center_point - j - buffer
                 break
-        return min_value
+        return max(min_value, 0)
 
 def basic_expand(arr_resized, center_point, buffer):
     """
