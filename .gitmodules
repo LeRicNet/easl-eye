@@ -1,0 +1,3 @@
+[submodule "ext/SynthSeg"]
+	path = ext/SynthSeg
+	url = https://github.com/LeRicNet/SynthSeg
